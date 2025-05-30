@@ -32,6 +32,19 @@ const Todo: FC<props> = ({
     setIsEditing(false);
   };
 
+  const handleEscapeClick = () => {
+    setIsEditing(false);
+    setNewContent(todo.content);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") {
+      handleSaveClick();
+    } else if (e.key === "Escape") {
+      handleEscapeClick();
+    }
+  };
+
   return (
     <div className="flex flex-col gap-2 p-4 bg-[#4F5D75] text-white rounded-lg shadow-sm w-full">
       <div className="flex items-center flex-1">
@@ -40,16 +53,15 @@ const Todo: FC<props> = ({
             type="text"
             value={newContent}
             onChange={handleContentChange}
-            onBlur={handleSaveClick}
+            onKeyDown={handleKeyDown}
+            onBlur={handleEscapeClick}
             className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             autoFocus
           />
         ) : (
-          <span 
+          <span
             className={` font-semibold ${
-              todo.completed 
-                ? "line-through text-gray-400" 
-                : "text-white"
+              todo.completed ? "line-through text-gray-400" : "text-white"
             }`}
           >
             {todo.content}
@@ -57,7 +69,7 @@ const Todo: FC<props> = ({
         )}
       </div>
       <div className="flex items-center justify-start space-x-2">
-        <button 
+        <button
           onClick={() => toggleIsTodoDone(todo.id, todo.completed)}
           className={`px-3 py-1 text-sm rounded-md ${
             todo.completed
@@ -67,24 +79,24 @@ const Todo: FC<props> = ({
         >
           {todo.completed ? "Undo" : "Complete"}
         </button>
-        
+
         {isEditing ? (
-          <button 
+          <button
             onClick={handleSaveClick}
             className="px-3 py-1 text-sm bg-blue-100 text-blue-700 rounded-md hover:bg-blue-200"
           >
             Save
           </button>
         ) : (
-          <button 
+          <button
             onClick={handleEditClick}
             className="px-3 py-1 text-sm bg-blue-100 text-blue-700 rounded-md hover:bg-blue-200"
           >
             Edit
           </button>
         )}
-        
-        <button 
+
+        <button
           onClick={() => deleteTodoItem(todo.id)}
           className="px-3 py-1 text-sm bg-red-100 text-red-700 rounded-md hover:bg-red-200"
         >
