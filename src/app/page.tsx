@@ -1,22 +1,13 @@
-"use client";
-
-import { UserButton, useUser } from "@clerk/nextjs";
-
-export default function UserProfile() {
-  const { user, isLoaded } = useUser();
+import { getTodos } from "@/app/actions/todoAction";
+import Todos from "@/app/components/todos";
   
-  if (!isLoaded) {
-    return <div>Loading...</div>;
-  }
-  
+export default async function Home() {
+  const todos = await getTodos();
+
   return (
-    <div className="flex items-center gap-4">
-      {user && (
-        <>
-          <span className="text-sm">Hi, {user.firstName || user.username}!</span>
-          <UserButton afterSignOutUrl="/sign-in" />
-        </>
-      )}
-    </div>
+    <main className="flex min-h-screen flex-col items-center p-5 bg-[#2D3142]">
+      <h1 className="text-4xl font-bold mb-8">Todo List</h1>
+      <Todos todos={todos} />
+    </main>
   );
 }
